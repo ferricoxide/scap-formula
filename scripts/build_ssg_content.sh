@@ -9,6 +9,7 @@ MAKE_TARGETS_RHEL=(
   rhel9-content
 )
 MAKE_TARGETS_OTHERS=(
+  almalinux9-content
   centos8-content
   cs9-content
   ol8-content
@@ -29,7 +30,14 @@ exec > >(tee "${DIST_DIR}/build-content.log") 2>&1
 
 # Clone the repo and checkout the latest tag
 git clone "$REPO" "$BUILD_DIR" && pushd "$BUILD_DIR"
-TAG="${SSG_VER:-$(git describe --tags $(git rev-list --tags --max-count=1))}"
+
+if [[ -n ${REPO_COMMIT_ID} ]]
+then
+  TAG="${REPO_COMMIT_ID}"
+else
+  TAG="${SSG_VER:-$(git describe --tags $(git rev-list --tags --max-count=1))}"
+fi
+
 echo
 echo "Tag to build: ${TAG}"
 echo

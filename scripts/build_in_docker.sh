@@ -5,7 +5,8 @@ while [ -h "$SCRIPT_DIR" ] ; do SCRIPT_DIR="$(readlink "$SCRIPT_DIR")"; done
 PROJECT_DIR="$( cd -P "$( dirname "$SCRIPT_DIR" )/.." && pwd )"
 DIST_DIR="${PROJECT_DIR}/scap/content/guides/openscap"
 SSG_VER_FILE="${PROJECT_DIR}/.github/workflows/dependabot_hack.yml"
-SSG_VER="v$(grep 'ComplianceAsCode/content' "$SSG_VER_FILE" | grep -oE '[0-9]+(\.[0-9]+){1,3}')"
+# SSG_VER="v$(grep 'ComplianceAsCode/content' "$SSG_VER_FILE" | grep -oE '[0-9]+(\.[0-9]+){1,3}')"
+SSG_VER="${REPO_COMMIT_ID:-v$(grep 'ComplianceAsCode/content' "$SSG_VER_FILE" | grep -oE '[0-9]+(\.[0-9]+){1,3}')}"
 
 echo "Removing old ssg-build-${SSG_VER} container..."
 docker container stop "ssg-build-${SSG_VER}" || true
