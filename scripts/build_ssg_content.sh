@@ -45,8 +45,11 @@ git checkout "$TAG"
 echo
 
 # See if we can borrow the RHEL 9 stig.profile content
-cp "$BUILD_DIR/products/rhel9/profiles/stig.profile" \
-   "$BUILD_DIR/products/almalinux9/profiles/stig.profile"
+sed \
+  -e '/\s\s*In addition to being/,/^\s\s*- Red Hat Containers/d' \
+  -e 's/Red Hat Enterprise/Alma/' \
+    "$BUILD_DIR/products/rhel9/profiles/stig.profile" > \
+    "$BUILD_DIR/products/almalinux9/profiles/stig.profile"
 
 # Update standard_profiles
 echo "Ensuring ssg content includes required profiles: ${PROFILES[@]}"
